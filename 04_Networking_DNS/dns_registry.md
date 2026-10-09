@@ -26,7 +26,7 @@ Updated 2026-10-09 from Tony's `Resolve-DnsName` run (public records, CONFIRMED 
 | longviewhub.io | mail | MX | longviewhub.io, priority 0 (mail is on the same server) | 7200 | — | public | CONFIRMED |
 | longviewhub.io | SPF | TXT | `v=spf1 +a +mx +ip4:172.241.167.65 +ip4:172.241.164.43 +ip4:172.241.167.110 ~all` | 7200 | — | public | CONFIRMED |
 | _dmarc.longviewhub.io | DMARC | TXT | **none** | — | — | — | CONFIRMED absent |
-| default._domainkey.longviewhub.io | DKIM | TXT | UNKNOWN — not yet queried | — | — | — | UNKNOWN |
+| default._domainkey.longviewhub.io | DKIM | TXT | present and valid per cPanel Email Deliverability (status flags SPF only, for longviewhub.io, cloud. and spoke.) — record value not yet captured | — | — | — | INFERRED (strong), 2026-10-09 |
 | longviewhub.io | CAA | CAA | UNKNOWN (Windows resolver cannot query CAA) | — | — | — | UNKNOWN |
 | *.longviewhub.io | wildcard, serves the apex | — | Let's Encrypt wildcard, renewed ~every 60 days; **current cert issued 2026-09-05, expires 2026-12-04** (read from the browser padlock) | — | valid | — | CONFIRMED (browser, 2026-10-09) |
 | spoke.longviewhub.io, www.spoke.longviewhub.io | old project — **RETIRE (D-003)** | A/CNAME UNKNOWN | certs 2026-03-13, 05-13, 07-13 visible in crt.sh (index lags) | — | irrelevant once retired | UNKNOWN | CONFIRMED exists; target UNKNOWN |
@@ -36,6 +36,7 @@ Updated 2026-10-09 from Tony's `Resolve-DnsName` run (public records, CONFIRMED 
 Notes
 - The three extra SPF IPs are in the same 172.241.0.0/16 block as the server. Reading: the host's outbound mail relays or sibling nodes, put there by the host's default SPF template. INFERRED.
 - SPF ends in `~all` (softfail). Acceptable; `-all` is stricter and can come later once DKIM and DMARC are in place.
+- cPanel Email Deliverability (2026-10-09) shows "Problems Exist (SPF)" on longviewhub.io, cloud.longviewhub.io and spoke.longviewhub.io, and no DKIM complaint. Its Repair button rewrites SPF to the host's template; before using it, read the Manage page to compare the current record (recorded above) with the suggested one. Repair is YELLOW and reversible because the current value is recorded here.
 - No DMARC record at all. Many receiving gateways, government ones included, now reject or quarantine unauthenticated mail from domains without DMARC. This is the leading candidate for the 2026-09-03 rejection (K1).
 - Zone serial shows five edits on 2026-10-09. If Tony did not touch DNS that day, this is host automation (cPanel-style hosts rewrite zones for AutoSSL validation and cluster syncs). Confirm with Tony; not an alarm by itself.
 
