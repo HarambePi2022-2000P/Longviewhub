@@ -45,10 +45,9 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 - Recovery Priority: 1
 
 ## TLS certificates
-- Apex: GoDaddy DV certificate valid 2026-06-19 → **2027-01-03**; origin and renewal mechanism UNKNOWN. Let's Encrypt wildcard renewals stopped after 2026-07-06 (expired 2026-10-04). HSTS 2 years with includeSubDomains.
-- Subdomains: spoke cert expires **2026-10-11**; nvr1 to 2026-11-05; stratus UNKNOWN. Full history in 04_Networking_DNS/dns_registry.md.
-- Renewal mechanism: UNKNOWN; hypothesis cPanel AutoSSL, currently failing for wildcard and spoke.
-- Recovery Priority: 1 (raised 2026-10-09)
+- Apex: Let's Encrypt wildcard `*.longviewhub.io`, issued 2026-09-05, expires 2026-12-04, renewing on a ~60-day cadence (CONFIRMED in browser 2026-10-09). A non-serving GoDaddy DV cert (2026-06-19 → 2027-01-03) also exists; origin UNKNOWN. HSTS 2 years with includeSubDomains.
+- Renewal mechanism: INFERRED cPanel AutoSSL (DNS-01 for the wildcard); confirm from the panel.
+- Recovery Priority: 2
 - Recovery Priority: 2
 
 ## Tailscale tailnet
@@ -60,17 +59,17 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 ## Web root — https://longviewhub.io
 - Content: Nextcloud itself (CONFIRMED by Tony 2026-10-06). Merged into the Nextcloud entry; no separate web service known.
 
-## spoke.longviewhub.io — UNKNOWN service
-- Purpose, host, IP: UNKNOWN — discovery required (ask Tony; resolve A record). Has had its own Let's Encrypt certs since at least 2026-03; renewal stopped after 2026-07-13; current cert expires 2026-10-11.
-- Recovery Priority: UNKNOWN until purpose known
+## spoke.longviewhub.io — RETIRE (D-003)
+- Old project, no longer worked on (Tony, 2026-10-09). Where it points and whether its directory/database holds anything: UNKNOWN — inventory before deletion (T27).
+- Recovery Priority: none
 
-## stratus.longviewhub.io — UNKNOWN service
-- Purpose, host, IP: UNKNOWN — discovery required. Cert seen 2026-02-04.
-- Recovery Priority: UNKNOWN until purpose known
+## stratus.longviewhub.io — RETIRE (D-003)
+- Old project, no longer worked on (Tony, 2026-10-09). Inventory before deletion (T27).
+- Recovery Priority: none
 
-## nvr1.longviewhub.io — UNKNOWN service (name suggests a network video recorder)
-- Purpose, host, IP: UNKNOWN — discovery required. Let's Encrypt certs every 90 days, last 2026-08-07, expires 2026-11-05. Not on 172.241.164.114 if ipinfo's one-domain count is right.
-- Recovery Priority: UNKNOWN until purpose known
+## nvr1.longviewhub.io — RETIRE (D-003)
+- Old project, no longer worked on (Tony, 2026-10-09). Name suggests a video recorder; if recordings exist anywhere, decide archive vs discard before deletion (T27).
+- Recovery Priority: none
 
 ## Dependency — Google account longviewhub@gmail.com
 - Not a hosted service. Holds the Drive connected to this session (ChatGPT export, "Claude" folder). Recovered 2026-05-19 after access loss. Recovery email: johnson.ross.a@gmail.com.

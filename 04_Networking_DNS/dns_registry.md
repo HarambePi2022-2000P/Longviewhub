@@ -25,10 +25,10 @@ Updated 2026-10-09 from Tony's `Resolve-DnsName` run (public records, CONFIRMED 
 | _dmarc.longviewhub.io | DMARC | TXT | **none** | — | — | — | CONFIRMED absent |
 | default._domainkey.longviewhub.io | DKIM | TXT | UNKNOWN — not yet queried | — | — | — | UNKNOWN |
 | longviewhub.io | CAA | CAA | UNKNOWN (Windows resolver cannot query CAA) | — | — | — | UNKNOWN |
-| *.longviewhub.io | wildcard (what it covers in practice is UNKNOWN) | — | Let's Encrypt wildcard certs issued ~every 60 days through 2026-07-06; **none since** | — | expired 2026-10-04 | — | CONFIRMED (crt.sh) |
-| spoke.longviewhub.io, www.spoke.longviewhub.io | UNKNOWN purpose | A/CNAME UNKNOWN | certs 2026-03-13, 05-13, 07-13 (Let's Encrypt); none since | — | current cert **expires 2026-10-11** | UNKNOWN | CONFIRMED exists (crt.sh); target UNKNOWN |
-| stratus.longviewhub.io, www.stratus.longviewhub.io | UNKNOWN purpose | UNKNOWN | cert 2026-02-04 (Let's Encrypt); later ones not visible in the captured list | — | UNKNOWN | UNKNOWN | CONFIRMED exists (crt.sh); target UNKNOWN |
-| nvr1.longviewhub.io | UNKNOWN; name suggests a network video recorder | UNKNOWN | certs 2026-02-07, 05-08, 08-07 (Let's Encrypt) every 90 days | — | current cert expires 2026-11-05 | UNKNOWN | CONFIRMED exists (crt.sh); target UNKNOWN |
+| *.longviewhub.io | wildcard, serves the apex | — | Let's Encrypt wildcard, renewed ~every 60 days; **current cert issued 2026-09-05, expires 2026-12-04** (read from the browser padlock) | — | valid | — | CONFIRMED (browser, 2026-10-09) |
+| spoke.longviewhub.io, www.spoke.longviewhub.io | old project — **RETIRE (D-003)** | A/CNAME UNKNOWN | certs 2026-03-13, 05-13, 07-13 visible in crt.sh (index lags) | — | irrelevant once retired | UNKNOWN | CONFIRMED exists; target UNKNOWN |
+| stratus.longviewhub.io, www.stratus.longviewhub.io | old project — **RETIRE (D-003)** | UNKNOWN | cert 2026-02-04 visible in crt.sh | — | irrelevant once retired | UNKNOWN | CONFIRMED exists; target UNKNOWN |
+| nvr1.longviewhub.io | old project — **RETIRE (D-003)** | UNKNOWN | certs 2026-02-07, 05-08, 08-07 visible in crt.sh | — | irrelevant once retired | UNKNOWN | CONFIRMED exists; target UNKNOWN |
 
 Notes
 - The three extra SPF IPs are in the same 172.241.0.0/16 block as the server. Reading: the host's outbound mail relays or sibling nodes, put there by the host's default SPF template. INFERRED.
@@ -43,17 +43,18 @@ Reading: the ISO-8859-1 content type and the absence of Nextcloud's usual header
 ## TLS certificate history (crt.sh, captured 2026-10-09; each cert appears twice in crt.sh as precert + leaf)
 | Hostname(s) | Issuer | Not before | Not after | Pattern |
 |-------------|--------|------------|-----------|---------|
-| longviewhub.io + *.longviewhub.io | Let's Encrypt | 2025-12-31, 2026-03-02, 2026-05-06, 2026-07-06 | 90 days each; last expired 2026-10-04 | ~60-day cadence, **stopped after 2026-07-06** |
-| longviewhub.io (apex only) | **GoDaddy DV (TLS Intermediate CA DV R1v1)** | 2026-06-19 | **2027-01-03** | one-off; issued the day after the domain's June 18 renewal date; who obtained it and how it renews is UNKNOWN |
-| spoke + www.spoke | Let's Encrypt | 2026-03-13, 05-13, 07-13 | last expires **2026-10-11** | ~60-day cadence, **stopped after 2026-07-13** |
-| nvr1 | Let's Encrypt | 2026-02-07, 05-08, 08-07 | last expires 2026-11-05 | 90-day cadence, still alive as of August |
-| stratus + www.stratus | Let's Encrypt | 2026-02-04 | 2026-05-05 | later issuances not visible in the capture; may have lapsed or scrolled off |
+| longviewhub.io + *.longviewhub.io | Let's Encrypt | 2025-12-31, 2026-03-02, 2026-05-06, 2026-07-06, **2026-09-05 (serving; not yet in crt.sh)** | current expires **2026-12-04** | ~60-day cadence, healthy; next renewal expected ~2026-11-04 |
+| longviewhub.io (apex only) | GoDaddy DV (TLS Intermediate CA DV R1v1) | 2026-06-19 | 2027-01-03 | **not serving**; one-off; issued the day after the domain's June 18 renewal date; origin UNKNOWN. If the registrar turns out to be GoDaddy, their domain-forwarding feature auto-issues certs like this. |
+| spoke + www.spoke | Let's Encrypt | 2026-03-13, 05-13, 07-13 (crt.sh lags) | — | being retired (D-003) |
+| nvr1 | Let's Encrypt | 2026-02-07, 05-08, 08-07 (crt.sh lags) | — | being retired (D-003) |
+| stratus + www.stratus | Let's Encrypt | 2026-02-04 (crt.sh lags) | — | being retired (D-003) |
 
-Readings
-- Tony's HEAD request on 2026-10-09 completed without a certificate error, so the apex is currently served by a valid certificate. With the Let's Encrypt wildcard expired on 10-04, that is almost certainly the GoDaddy certificate. INFERRED; confirm by reading the padlock in a browser.
-- Wildcard Let's Encrypt certificates require DNS-01 validation, which fits cPanel AutoSSL issuing wildcards when DNS is hosted on the same cPanel cluster (it is). The five zone edits on 2026-10-09 (K5) fit AutoSSL inserting and removing `_acme-challenge` records while retrying a validation that keeps failing. HYPOTHESIS, testable from the hosting panel's SSL/TLS Status page.
-- Whatever the cause, automatic renewal for the apex wildcard and for spoke stopped in July 2026. The apex has a hard cliff on **2027-01-03** unless the GoDaddy cert renews or AutoSSL is repaired; spoke has one on **2026-10-11**.
-- HSTS is set with includeSubDomains for two years: browsers will refuse any subdomain whose certificate lapses, with no click-through.
+Readings (corrected 2026-10-09 after reading the serving certificate in the browser)
+- **crt.sh is a lower bound, not the current state.** Its index lagged by more than a month here; the September wildcard was missing. Rule for this project: never declare a renewal broken from crt.sh alone; read the serving certificate first.
+- The apex wildcard renews on a ~60-day cadence and is healthy. That cadence, with DNS on the host's cluster, fits cPanel AutoSSL issuing wildcards via DNS-01. INFERRED.
+- The five zone edits on 2026-10-09 (K5) are still unexplained. Revised hypothesis: AutoSSL attempting validation for the dead subdomains (spoke, stratus, nvr1) and failing daily. Retiring them should quiet it. Testable from the panel's SSL/TLS Status page.
+- The GoDaddy certificate is an unexplained artifact, not a risk. Its date (one day after the domain's renewal anniversary) raises the question of whether the domain moved to GoDaddy in June 2026, which would also explain the missing 2026 renewal notices from the old registrar (K2). Ask Tony; confirm at the registrar.
+- HSTS is set with includeSubDomains for two years: any subdomain that stays in DNS must stay on valid HTTPS. Retired names must leave DNS entirely rather than be left pointing at nothing.
 
 ## Subdomain strategy
 Deferred until crt.sh listing and hosting-panel inventory are in. Do not create or change DNS before then, except the mail-authentication fixes tracked in the backlog (T23, T24), which are YELLOW changes with their own verification steps.

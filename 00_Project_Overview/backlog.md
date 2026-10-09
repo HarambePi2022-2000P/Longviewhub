@@ -5,7 +5,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 |----|-----|-------|------|------------|--------|
 | T01 | BLOCKER | R | Identify hosting provider, plan type, and access path (panel / SSH / SFTP). Provider INFERRED HostISO on Leaseweb USA (NYC); dedicated IP suggests VPS/dedicated; plan and access still UNKNOWN | Tony | PARTLY ANSWERED |
 | T02 | BLOCKER | R | Obtain read-only baseline of the server (OS, disk, PHP, occ status) | T01 | OPEN |
-| T03 | CRITICAL | R | Verify domain renewal: expiry date, auto-renew, lock, contact email, 2FA. ICANN lookup cannot do .io; use registrar login or the .io registry lookup. | Registrar login | OPEN |
+| T03 | CRITICAL | R | Verify domain renewal: expiry date, auto-renew, lock, contact email, 2FA. ICANN lookup cannot do .io; use registrar login. Also answer: was the domain moved to GoDaddy in June 2026? (GoDaddy cert 2026-06-19; no 2026 notices from the old registrar.) | Registrar login | OPEN |
 | T04 | CRITICAL | R | Take a fresh Phase 0 snapshot (config.php, DB dump, data copy or at minimum data listing) before any change. Old backups exist (T22) but are not current. | T01, T02 | OPEN |
 | T05 | CRITICAL | R | Credential and recovery-email inventory for registrar, host, SSH, Nextcloud admin, DB, SMTP, Google accounts (locations only) | Tony | OPEN |
 | T06 | CRITICAL | R | Record Nextcloud version, PHP version (web + CLI), DB type/version, data dir, enabled apps, setup warnings | T02 | OPEN |
@@ -15,8 +15,9 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T24 | HIGH | R | Publish DMARC: `_dmarc.longviewhub.io TXT "v=DMARC1; p=none; rua=mailto:<a mailbox Tony reads>"`. YELLOW (DNS change; reversible by deleting the record). Do after T23 so reports are meaningful. Tighten to p=quarantine later. | T23 | OPEN |
 | T09 | HIGH | R | Determine Nextcloud upgrade path (sequential majors), PHP compatibility per step, DB compatibility | T06 | OPEN |
 | T10 | HIGH | R | Confirm TLS issuer, expiry, renewal mechanism; cover all live hostnames. crt.sh history captured 2026-10-09; superseded by T26 for the fix. | T07 | PARTLY DONE |
-| T25 | HIGH | R | Identify spoke, stratus, nvr1: purpose, A records, where they run, whether public. GREEN (resolve + ask Tony). | Tony | OPEN |
-| T26 | CRITICAL | R | Certificates: (a) read the serving cert on longviewhub.io and spoke in a browser; (b) in the hosting panel open SSL/TLS Status and read AutoSSL's log for the wildcard and spoke; (c) repair renewal before 2026-10-11 for spoke and well before 2027-01-03 for the apex. (a)(b) GREEN; (c) YELLOW. | T01 access path | OPEN |
+| T25 | HIGH | R | Identify spoke, stratus, nvr1. Answered 2026-10-09: old projects, retire (D-003). | Tony | DONE |
+| T27 | NORMAL | R | Retire spoke, stratus, nvr1 per D-003, staged: record targets and contents → remove DNS records and panel subdomains (YELLOW) → delete directories/databases per item on Tony's go (RED). Also remove any related Tailscale nodes. | T01 | OPEN |
+| T26 | NORMAL | R | Certificates: serving cert verified healthy 2026-10-09 (expires 2026-12-04). Remaining: confirm the renewal mechanism (AutoSSL?) in the panel; note the non-serving GoDaddy cert's origin. GREEN. | T01 | OPEN — downgraded |
 | T11 | HIGH | R | Map Tailscale nodes; identify which is the server; confirm whether admin UIs are public or tailnet-only | Tailscale console | OPEN |
 | T12 | NORMAL | R | Complete service registry and DNS registry from discovery output | T07, T02 | OPEN |
 | T13 | NORMAL | R | Write restore runbook and upgrade runbook for Nextcloud | T04, T09 | OPEN |
@@ -31,12 +32,12 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T21 | LATER | F | Mine the 2026-05-09 ChatGPT export in Drive for prior setup notes (≈110 MB JSON; needs local grep, not this session) | Tony's machine | PARKED |
 
 ## Active Work Queue (3–7 items)
-1. T26 — certificates (spoke expires 2026-10-11). Next: Tony reads the padlock on longviewhub.io and spoke; then panel SSL/TLS Status.
-2. T25 — identify spoke / stratus / nvr1. Next: Tony resolves the three names and says what they are.
-3. T23 — DKIM query. Next: Tony runs the one-liner.
-4. T01 — hosting access path. Next: Tony names the panel URL / SSH availability.
-5. T03 — domain renewal state. Next: registrar login readout.
-6. T22 — backup media inventory. Next: Tony plugs drives in one at a time.
+1. T23 — DKIM query. Next: Tony runs the one-liner.
+2. T01 — hosting access path. Next: Tony names the panel URL / SSH availability. Unblocks T02, T06, T26, T27.
+3. T03 — domain renewal state + GoDaddy question. Next: registrar login readout.
+4. T22 — backup media inventory. Next: Tony plugs drives in one at a time.
+5. T06 — Nextcloud baseline. Next: admin Overview/System pages.
+6. T27 — retire spoke/stratus/nvr1. Next: waits on T01.
 
 ## Blocker Log
 | ID | Blocker | Blocks | Opened | Status |
