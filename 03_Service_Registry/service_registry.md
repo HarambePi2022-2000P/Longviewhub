@@ -4,7 +4,7 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 ## Nextcloud
 - Purpose: files, photos (Android "Photos for Nextcloud" client), sync
 - Domain/Subdomain: **https://longviewhub.io** (apex) — CONFIRMED by Tony 2026-10-06
-- Server/Host: 172.241.164.114 (Leaseweb USA address space, AS396362, New York City; one domain on the IP). Apache with HTTP/2. Operator INFERRED: HostISO (nameservers ns1–4.server.plus, SOA admin monitor.corp.hostiso.com) running on Leaseweb infrastructure. Plan type INFERRED VPS or dedicated (dedicated IP); confirm via Tony's billing or panel.
+- Server/Host: 172.241.164.114 (Leaseweb USA address space, AS396362, New York City; one domain on the IP). Apache with HTTP/2. Operator INFERRED: HostISO (nameservers ns1–4.server.plus, SOA admin monitor.corp.hostiso.com) running on Leaseweb infrastructure. Control panel: **cPanel** with **SSH access available** (CONFIRMED by Tony 2026-10-09). Plan type INFERRED VPS or dedicated (dedicated IP); confirm from cPanel's server information / billing.
 - Application / Version: Nextcloud / UNKNOWN
 - Runtime: PHP UNKNOWN; web server Apache (CONFIRMED 2026-10-09)
 - Database: UNKNOWN type/version/location

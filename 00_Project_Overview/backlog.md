@@ -3,7 +3,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 
 | ID | Cat | Track | Task | Depends on | Status |
 |----|-----|-------|------|------------|--------|
-| T01 | BLOCKER | R | Identify hosting provider, plan type, and access path (panel / SSH / SFTP). Provider INFERRED HostISO on Leaseweb USA (NYC); dedicated IP suggests VPS/dedicated; plan and access still UNKNOWN | Tony | PARTLY ANSWERED |
+| T01 | HIGH | R | Hosting access: **cPanel, SSH available** (2026-10-09). Provider INFERRED HostISO on Leaseweb USA (NYC). Remaining: plan type, provider name on the bill, panel URL recorded (location only). | Tony | MOSTLY ANSWERED — no longer a blocker |
 | T02 | BLOCKER | R | Obtain read-only baseline of the server (OS, disk, PHP, occ status) | T01 | OPEN |
 | T03 | HIGH | R | Domain: expiry 2027-06-18 and transfer lock confirmed 2026-10-09. Remaining at registrar login: auto-renew ON, contact email current, 2FA on. Registrar is eNom via qunatum.com. | Registrar login | OPEN — narrowed, downgraded from CRITICAL |
 | T04 | CRITICAL | R | Take a fresh Phase 0 snapshot (config.php, DB dump, data copy or at minimum data listing) before any change. Old backups exist (T22) but are not current. | T01, T02 | OPEN |
@@ -33,7 +33,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 
 ## Active Work Queue (3–7 items)
 1. T23 — DKIM query. Next: Tony runs the one-liner.
-2. T01 — hosting access path. Next: Tony names the panel URL / SSH availability. Unblocks T02, T06, T26, T27.
+2. T02/T06 — server + Nextcloud baseline via cPanel Terminal (Step 4). Next: Tony pastes the read-only block.
 3. T03 — registrar hygiene (auto-renew, contact, 2FA). Next: registrar login readout.
 4. T22 — backup media inventory. Next: Tony plugs drives in one at a time.
 5. T06 — Nextcloud baseline. Next: admin Overview/System pages.
@@ -44,6 +44,6 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 |----|---------|--------|--------|--------|
 | B01 | Session egress proxy blocks DNS, RDAP, crt.sh, and longviewhub.io itself | T07 from this session | 2026-10-03 | OPEN — workaround: run from Tony's machine |
 | B02 | No server access from this session | T02, T04, T06 | 2026-10-03 | OPEN — Tony runs commands |
-| B03 | Hosting provider unknown | T01 → nearly everything | 2026-10-03 | OPEN |
+| B03 | Hosting provider unknown | T01 → nearly everything | 2026-10-03 | CLOSED 2026-10-09 — cPanel + SSH confirmed; provider inferred HostISO |
 | B04 | Credential locations unknown | T05 | 2026-10-03 | OPEN |
 | B05 | Documentation has no permanent home | Continuity across sessions | 2026-10-03 | CLOSED 2026-10-09 — repo github.com/HarambePi2022-2000P/Longviewhub (D-002) |
