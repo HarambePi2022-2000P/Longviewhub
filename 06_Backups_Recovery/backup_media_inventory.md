@@ -30,8 +30,8 @@ A Nextcloud backup is only complete if it has all three: the **data directory**,
 
 ## Phase 0 snapshot plan (2026-10-09)
 Goal: one complete, off-server copy of everything that cannot be recreated, before any migration or deletion.
-1. **Databases** (≈120 MB total): cPanel → Backup → "Download a MySQL Database Backup" → click each of the five (cloud33, cloud35, hub2bu26, next815, net2f13). Saves .sql.gz files to Tony's machine. GREEN.
-2. **Data directories and mail** (≈20 GB compressed): in cPanel Terminal create ~/phase0/ and tar nextclouddata, clouddata, mail+etc. YELLOW (writes ~20 GB into the 487 GB free quota; nothing modified).
+1. **Databases** (≈120 MB total): cPanel has no Backup page on this account. Use `mysqldump` in the Terminal (one password prompt, nothing stored) into ~/phase0/, or phpMyAdmin → each database → Export. Five databases: cloud33, cloud35, hub2bu26, next815, net2f13. GREEN (writes dump files only).
+2. **Data directories and mail** (≈20 GB compressed): tar job started 2026-10-09 16:36 server time under nohup into ~/phase0/ (nextclouddata, clouddata, mail+etc). Completion marker: `DONE` in ~/phase0/tar.log. Verify each archive with `tar -tzf` only after DONE appears; checking a half-written archive reports "unexpected end of file", which is not a failure.
 3. **Existing March tarballs** (21 GB): hubdata.tar.gz and nextclouddata.tar.gz from backupMARCH26-compressed.
 4. **Download** items 2–3 to the 2 TB SSD via cPanel File Manager or an SFTP client (WinSCP/FileZilla over SSH). ≈41 GB; hours on a home connection; run overnight.
 5. **Verify**: file sizes match; `tar -tzf` lists each archive without error; one .sql.gz opens.

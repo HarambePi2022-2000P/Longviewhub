@@ -15,7 +15,7 @@ Captured 2026-10-09 from cPanel → Terminal (read-only). CONFIRMED unless marke
 | Database server | MariaDB 10.6.28 (client reports 10.6.28; server version assumed same, confirm) | CONFIRMED (client) |
 | Web server | Apache with HTTP/2 (from headers) | CONFIRMED |
 | SSH / Terminal | Available (cPanel Terminal; SSH keys UNKNOWN) | CONFIRMED |
-| Control-panel backup feature | UNKNOWN — check cPanel → Backup / JetBackup | UNKNOWN |
+| Control-panel backup feature | cPanel's own Backup / Backup Wizard is **not offered** on this account (Tony, 2026-10-09). Whether the host provides JetBackup or any server-side backup is UNKNOWN — look for a JetBackup icon; ask HostISO. Database dumps therefore go through `mysqldump` in the Terminal or phpMyAdmin export. | CONFIRMED (absence) |
 
 ## Platform-age notes
 - CloudLinux 7 is past vendor end-of-life (mid-2024) unless the host pays for extended support. MariaDB 10.6 reached end-of-life in mid-2026. Both are the host's responsibility, not ours, but they bear on the Phase 3 stay-or-move decision. INFERRED from version strings.

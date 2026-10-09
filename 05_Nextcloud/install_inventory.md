@@ -22,8 +22,8 @@ Captured 2026-10-09 from cPanel Terminal. Versions read from each copy's `versio
 |----------|------|-----------|--------|
 | hfppyjna_cloud33 | 32 MB | live 33.0.9 | LIVE |
 | hfppyjna_cloud35 | 12 MB | abandoned v35 attempt | retire after Phase 0 snapshot |
-| hfppyjna_hub2bu26 | 41 MB | HUB2 (v24) database copy made ~2026-10-01, by name | KEEP — migration source candidate |
-| hfppyjna_next815 | 36 MB | UNKNOWN by name; plausibly HUB2's original production DB. Check `dbname` in backupMarch26/public_html/HUB2/config/config.php | KEEP until identified |
+| hfppyjna_hub2bu26 | 41 MB | copy of HUB2's DB made ~2026-10-01 (by name and size) | KEEP — secondary copy |
+| hfppyjna_next815 | 36 MB | **HUB2's production database** (HUB2 config.php: dbname hfppyjna_next815, datadirectory /home/hfppyjna/nextclouddata, version 24.0.12.1). CONFIRMED 2026-10-09. | KEEP — **migration source** |
 | hfppyjna_net2f13 | 0.4 MB | UNKNOWN; tiny | KEEP until identified |
 
 ## Apex longviewhub.io
@@ -32,8 +32,8 @@ The apex `.htaccess` contains only `RewriteEngine on` and the cPanel PHP handler
 ## Every other Nextcloud / ownCloud copy on the account
 | Path | Version | What it looks like | Status |
 |------|---------|--------------------|--------|
-| public_html/cloud_v35_old | 35.0.1.1 | 992 MB of code. Tony installed 35 on 2026-10-06 and reinstalled 33 on 10-07 for app compatibility (Nextcloud cannot downgrade, so 33 is a fresh install). Its config.php points **datadirectory at /home/hfppyjna/clouddata, the live data directory**, and at DB hfppyjna_cloud35. Web-reachable and scanned (K12). Deleting the code directory does not touch data. | RETIRE — authorized by Tony 2026-10-09 (D-005) |
-| clouddata_v35 (home) | — | 111 MB, 2026-10-06; an earlier data dir for the v35 attempt before it was pointed at clouddata | RETIRE with cloud_v35_old, after Phase 0 snapshot |
+| ~/retired/cloud_v35_old (moved 2026-10-09, C-001) | 35.0.1.1 | 992 MB of code. Tony installed 35 on 2026-10-06 and reinstalled 33 on 10-07 for app compatibility (Nextcloud cannot downgrade, so 33 is a fresh install). Its config.php points **datadirectory at /home/hfppyjna/clouddata, the live data directory**, and at DB hfppyjna_cloud35. Web-reachable and scanned (K12). Deleting the code directory does not touch data. | RETIRE — authorized by Tony 2026-10-09 (D-005) |
+| ~/retired/clouddata_v35 (moved 2026-10-09, C-001) | — | 111 MB, 2026-10-06; an earlier data dir for the v35 attempt | DELETE with cloud_v35_old after Phase 0 snapshot |
 | backupMarch26/public_html/HUB2 | 24.0.12 | the previous production install ("HUB2"), upgraded 24.0.4 → 24.0.12 by the built-in updater on 2026-03-13 | BACKUP COPY (67 GB folder = full home snapshot of 2026-03-13) |
 | backupMarch26/public_html/hub | 24.0.4 | an even earlier "hub" install | BACKUP COPY |
 | nextclouddata (home) | — | **17 GB**; users `admin`, `claire`; appdata for two instance ids; updater backups → **HUB2's data directory**. Migration source. | OLD PRODUCTION DATA, on server only |
