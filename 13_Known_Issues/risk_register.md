@@ -29,7 +29,7 @@ Updated 2026-10-03.
 | K16 | Subdomain docroots sit inside public_html, so cloud.longviewhub.io is also reachable as longviewhub.io/cloud.longviewhub.io/ (log shows such requests). Standard cPanel layout; can be blocked in the apex .htaccess. | 2026-10-09 | nextcloud.log | OPEN — low priority |
 | K8 | Registrar record "Updated 2026-10-09" | 2026-10-09 | WHOIS | LIKELY EXPLAINED — same morning of activity; confirm nothing changed at the registrar during T03 |
 | K17 | Apex https://longviewhub.io/ serves a 403: no index file, no redirect in .htaccess. Nextcloud is only at cloud.longviewhub.io. | 2026-10-09 | cat .htaccess | OPEN — decide redirect vs landing page in subdomain strategy |
-| K18 | public_html/paladin: 9.1 GB from 2022 sitting in the web root, publicly reachable, purpose unknown | 2026-10-09 | du | OPEN — ask Tony (T37) |
+| K18 | public_html/paladin: 9.1 GB from 2022 in the web root, publicly reachable | 2026-10-09 | du | ACCEPTED for now — Tony: keep where it is. Revisit in Phase 3. |
 | K19 | RJ/NC_old: 33 GB of 2021-era Nextcloud (21.0.9) plus an 11 GB tarball of it. Unknown whether its content was ever carried into HUB2. | 2026-10-09 | du | OPEN — T37 |
 | K20 | hubdata is empty now, but hubdata.tar.gz from March is 12 GB. The "hub" (24.0.4) data was emptied after March; whether it lives on in HUB2 is unknown. | 2026-10-09 | ls, du | OPEN — T37 |
 | K21 | Three databases of unclear ownership: next815 (36 MB), net2f13 (0.4 MB), hub2bu26 (41 MB). Which one HUB2 actually used is unknown until its config is read. | 2026-10-09 | list_databases | OPEN — next terminal block |

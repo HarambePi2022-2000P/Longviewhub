@@ -9,7 +9,7 @@ Known so far (Tony, 2026-10-06): old backups on external HDs; maybe a copy on th
 | M1 | External HD #1 | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | |
 | M2 | External HD #2 | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | |
 | M3 | Workstation (Tycho) | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | |
-| M4 | 2 TB SSD (locked) | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | Needs unlocking by Tony; encryption type UNKNOWN |
+| M4 | 2 TB SSD, now unlocked | D: "2TB pSSD1", SanDisk hardware-encrypted (Unlocker utility shows as E:), exFAT, 1.82 TB, **915 GB free** (2026-10-09) | UNKNOWN (not yet inventoried) | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | yes | **Phase 0 destination.** Also note W: WorkingFiles 128 GB NTFS (108 free), C: 952 GB (372 free). |
 | S1 | **on-server** /home/hfppyjna/backupMarch26 | full home snapshot | 2026-03-13 | 67 GB | yes (nextclouddata inside) | UNKNOWN — no .sql found at depth ≤3 | yes (HUB2/config) | 24.0.12 | yes | same disk as production: a restore point, not a backup |
 | S2 | **on-server** backupMARCH26-compressed | hubdata.tar.gz (12 GB) + nextclouddata.tar.gz (9.7 GB) | 2026-03-13 | 21 GB | yes (both data dirs) | no | no | 24.x data | yes | portable; copy off-server in Phase 0 |
 | S3 | **on-server** HUB2bu26 | copy of old data dir | 2026-10-01 | 17 GB | yes | UNKNOWN | UNKNOWN | 24.0.12 data | yes | same disk |
@@ -33,7 +33,7 @@ Goal: one complete, off-server copy of everything that cannot be recreated, befo
 1. **Databases** (≈120 MB total): cPanel has no Backup page on this account. Use `mysqldump` in the Terminal (one password prompt, nothing stored) into ~/phase0/, or phpMyAdmin → each database → Export. Five databases: cloud33, cloud35, hub2bu26, next815, net2f13. GREEN (writes dump files only).
 2. **Data directories and mail** (≈20 GB compressed): tar job started 2026-10-09 16:36 server time under nohup into ~/phase0/ (nextclouddata, clouddata, mail+etc). Completion marker: `DONE` in ~/phase0/tar.log. Verify each archive with `tar -tzf` only after DONE appears; checking a half-written archive reports "unexpected end of file", which is not a failure.
 3. **Existing March tarballs** (21 GB): hubdata.tar.gz and nextclouddata.tar.gz from backupMARCH26-compressed.
-4. **Download** items 2–3 to the 2 TB SSD via cPanel File Manager or an SFTP client (WinSCP/FileZilla over SSH). ≈41 GB; hours on a home connection; run overnight.
+4. **Download** items 2–3 to D:\LongviewHub\phase0\2026-10-09\ on the 2 TB SSD via SFTP (WinSCP or FileZilla: SFTP, the cPanel hostname, port 22, user hfppyjna, cPanel password). ≈41 GB; hours on a home connection; run overnight. exFAT handles files over 4 GB.
 5. **Verify**: file sizes match; `tar -tzf` lists each archive without error; one .sql.gz opens.
 6. Later: RJ/NC_old.tar.gz (11 GB) and Downloads/public_html once Tony has said what they are (T37).
 Not done until step 5 passes. Only then: v35 cleanup, migration, deletions.

@@ -34,7 +34,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T31 | HIGH | R | cloud_v35_old off the web: **done 2026-10-09 (C-001)**. Step 2 (delete ~/retired/*, drop cloud35 DB, empty trash of HUB2 code — RED) after T04 verifies. | T04 | STEP 1 DONE |
 | T32 | CRITICAL | R | Data question answered 2026-10-09: migrate everything from HUB2 into the live instance. | Tony | DONE |
 | T36 | CRITICAL | R | **Migration HUB2 → 33.0.9, Option A** (D-004 decided). Runbook 10_Runbooks/migration_hub2_to_33.md. Starts only after T04 passes. | T04 | READY — blocked on T04 |
-| T37 | HIGH | R | Classify the big unknowns with Tony: paladin (9 GB, web root), RJ/NC_old (33 GB, 2021 Nextcloud), hubdata.tar.gz (12 GB, March), Downloads/public_html (27 GB), ziDVB66i (5 GB file). Keep / archive off-server / delete. | Tony | OPEN |
+| T37 | HIGH | R | Classify the big unknowns with Tony. **paladin: keep where it is for now (Tony, 2026-10-09; remains web-reachable, accepted).** Still open: RJ/NC_old (33 GB, 2021 Nextcloud), hubdata.tar.gz (12 GB, March), Downloads/public_html (27 GB), ziDVB66i (5 GB file). | Tony | PARTLY ANSWERED |
 | T33 | LATER | M | App rationalization: 76 enabled apps on shared hosting (Talk, Memories, Maps, Music, Mail, PhoneTrack, OIDC, MCP…). Trim to what is used. Phase 3. | T32 | PARKED |
 | T34 | NORMAL | R | Memory cache: APCu not loaded. cPanel → Select PHP Version (CloudLinux PHP Selector) → enable `apcu` and `imagick` for 8.3 (YELLOW), then set memcache.local to APCu in config (YELLOW). | T06 | OPEN |
 | T35 | NORMAL | R | Admin hygiene (Phase 5): create a distinctly named admin with 2FA, demote `admin`; review bruteforce/suspicious_login settings. | T32 | OPEN |
