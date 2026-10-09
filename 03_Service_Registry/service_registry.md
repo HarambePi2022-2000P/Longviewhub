@@ -4,7 +4,7 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 ## Nextcloud
 - Purpose: files, photos (Android "Photos for Nextcloud" client), sync
 - Domain/Subdomain: **https://longviewhub.io** (apex) — CONFIRMED by Tony 2026-10-06
-- Server/Host: 172.241.164.114, Apache with HTTP/2. Hosting provider INFERRED: HostISO (hostiso.com) or a brand it operates (nameservers ns1–4.server.plus, SOA admin monitor.corp.hostiso.com). Plan type (shared cPanel / VPS) UNKNOWN. Confirm via IP ownership lookup and Tony's billing.
+- Server/Host: 172.241.164.114 (Leaseweb USA address space, AS396362, New York City; one domain on the IP). Apache with HTTP/2. Operator INFERRED: HostISO (nameservers ns1–4.server.plus, SOA admin monitor.corp.hostiso.com) running on Leaseweb infrastructure. Plan type INFERRED VPS or dedicated (dedicated IP); confirm via Tony's billing or panel.
 - Application / Version: Nextcloud / UNKNOWN
 - Runtime: PHP UNKNOWN; web server Apache (CONFIRMED 2026-10-09)
 - Database: UNKNOWN type/version/location
@@ -45,8 +45,10 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 - Recovery Priority: 1
 
 ## TLS certificates
-- Issuer / expiry / renewal mechanism: UNKNOWN (HSTS is set to 2 years with includeSubDomains, so every subdomain must stay on valid HTTPS)
-- Hostnames covered: UNKNOWN — crt.sh pending
+- Apex: GoDaddy DV certificate valid 2026-06-19 → **2027-01-03**; origin and renewal mechanism UNKNOWN. Let's Encrypt wildcard renewals stopped after 2026-07-06 (expired 2026-10-04). HSTS 2 years with includeSubDomains.
+- Subdomains: spoke cert expires **2026-10-11**; nvr1 to 2026-11-05; stratus UNKNOWN. Full history in 04_Networking_DNS/dns_registry.md.
+- Renewal mechanism: UNKNOWN; hypothesis cPanel AutoSSL, currently failing for wildcard and spoke.
+- Recovery Priority: 1 (raised 2026-10-09)
 - Recovery Priority: 2
 
 ## Tailscale tailnet
@@ -57,6 +59,18 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 
 ## Web root — https://longviewhub.io
 - Content: Nextcloud itself (CONFIRMED by Tony 2026-10-06). Merged into the Nextcloud entry; no separate web service known.
+
+## spoke.longviewhub.io — UNKNOWN service
+- Purpose, host, IP: UNKNOWN — discovery required (ask Tony; resolve A record). Has had its own Let's Encrypt certs since at least 2026-03; renewal stopped after 2026-07-13; current cert expires 2026-10-11.
+- Recovery Priority: UNKNOWN until purpose known
+
+## stratus.longviewhub.io — UNKNOWN service
+- Purpose, host, IP: UNKNOWN — discovery required. Cert seen 2026-02-04.
+- Recovery Priority: UNKNOWN until purpose known
+
+## nvr1.longviewhub.io — UNKNOWN service (name suggests a network video recorder)
+- Purpose, host, IP: UNKNOWN — discovery required. Let's Encrypt certs every 90 days, last 2026-08-07, expires 2026-11-05. Not on 172.241.164.114 if ipinfo's one-domain count is right.
+- Recovery Priority: UNKNOWN until purpose known
 
 ## Dependency — Google account longviewhub@gmail.com
 - Not a hosted service. Holds the Drive connected to this session (ChatGPT export, "Claude" folder). Recovered 2026-05-19 after access loss. Recovery email: johnson.ross.a@gmail.com.
