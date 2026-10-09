@@ -11,8 +11,11 @@ Updated 2026-10-09 from Tony's `Resolve-DnsName` run (public records, CONFIRMED 
 | IP ownership (172.241.164.114) | AS396362 Leaseweb USA, Inc.; range 172.241.164.0/22; New York City; AS type Hosting; ipinfo counts **1 hosted domain** on this IP | CONFIRMED (ipinfo.io, 2026-10-09) |
 | Infrastructure reading | HostISO (DNS/admin) operating on Leaseweb USA address space in NYC. One domain on the IP means a dedicated IP: VPS or dedicated server more likely than crowded shared hosting. | INFERRED (medium) |
 | Registrar lookup via ICANN | Not possible: ICANN's RDAP tool does not cover .io (a ccTLD). Use the .io registry's own lookup or the registrar login. | CONFIRMED 2026-10-09 |
-| Registrar | eNom/Tucows reseller "qunatum.com" (from renewal notices) | INFERRED — confirm via ICANN lookup |
-| Expiry / auto-renew / lock / 2FA | UNKNOWN — registrar login or ICANN lookup | UNKNOWN |
+| Registrar | **eNom, LLC** (WHOIS server whois.enom.com), sold through the reseller "qunatum.com" that sends the renewal notices | CONFIRMED (WHOIS, 2026-10-09) |
+| Registration dates | Created 2021-06-18 · **Expires 2027-06-18** · Updated 2026-10-09 | CONFIRMED (WHOIS, 2026-10-09) |
+| Domain status | clientTransferProhibited (registrar transfer lock ON). No clientUpdateProhibited / clientDeleteProhibited. | CONFIRMED |
+| Nameserver IPs | ns1 86.48.20.175 · ns2 95.111.224.78 · ns3 149.28.136.125 · ns4 104.207.142.233 (four different networks: a geographically spread DNS cluster) | CONFIRMED |
+| Auto-renew / contact email / 2FA at registrar | UNKNOWN — registrar login required (expiry and lock now known) | UNKNOWN |
 
 ## Records
 | Hostname | Service | Type | Value | TTL | TLS | Class | Status |
@@ -53,7 +56,8 @@ Readings (corrected 2026-10-09 after reading the serving certificate in the brow
 - **crt.sh is a lower bound, not the current state.** Its index lagged by more than a month here; the September wildcard was missing. Rule for this project: never declare a renewal broken from crt.sh alone; read the serving certificate first.
 - The apex wildcard renews on a ~60-day cadence and is healthy. That cadence, with DNS on the host's cluster, fits cPanel AutoSSL issuing wildcards via DNS-01. INFERRED.
 - The five zone edits on 2026-10-09 (K5) are still unexplained. Revised hypothesis: AutoSSL attempting validation for the dead subdomains (spoke, stratus, nvr1) and failing daily. Retiring them should quiet it. Testable from the panel's SSL/TLS Status page.
-- The GoDaddy certificate is an unexplained artifact, not a risk. Its date (one day after the domain's renewal anniversary) raises the question of whether the domain moved to GoDaddy in June 2026, which would also explain the missing 2026 renewal notices from the old registrar (K2). Ask Tony; confirm at the registrar.
+- The GoDaddy certificate is an unexplained artifact, not a risk. The registrar is eNom, not GoDaddy, so a registrar move does not explain it. Origin stays UNKNOWN; low priority.
+- The registrar record shows Updated 2026-10-09, the same day the DNS zone serial shows five edits. Two systems touched on one day. If Tony did not log in and change anything that day, both are automation; if he did, the record should say what. Ask once.
 - HSTS is set with includeSubDomains for two years: any subdomain that stays in DNS must stay on valid HTTPS. Retired names must leave DNS entirely rather than be left pointing at nothing.
 
 ## Subdomain strategy

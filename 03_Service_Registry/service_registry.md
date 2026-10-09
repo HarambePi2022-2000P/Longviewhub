@@ -22,9 +22,9 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 
 ## Domain registration — longviewhub.io
 - Purpose: identity root for mail and all services
-- Registrar: INFERRED eNom/Tucows via reseller "qunatum.com" (notices from name-services.com)
-- Expiry: June 18 annually; 2026 state UNKNOWN (no 2026 notices observed; domain still live)
-- Auto-renew / Lock / 2FA: UNKNOWN
+- Registrar: eNom, LLC via reseller "qunatum.com" (CONFIRMED by WHOIS 2026-10-09)
+- Created 2021-06-18 · Expires **2027-06-18** (renewed for 2026; CONFIRMED) · Record updated 2026-10-09 (cause UNKNOWN)
+- Lock: transfer lock ON (clientTransferProhibited). Auto-renew / 2FA: UNKNOWN
 - Contact email on record: johnson.ross.a@gmail.com received notices 2023–2025; 2026 UNKNOWN
 - Nameservers: UNKNOWN
 - Backup Method: n/a (export zone file once nameservers known)

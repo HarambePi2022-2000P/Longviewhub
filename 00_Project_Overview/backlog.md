@@ -5,7 +5,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 |----|-----|-------|------|------------|--------|
 | T01 | BLOCKER | R | Identify hosting provider, plan type, and access path (panel / SSH / SFTP). Provider INFERRED HostISO on Leaseweb USA (NYC); dedicated IP suggests VPS/dedicated; plan and access still UNKNOWN | Tony | PARTLY ANSWERED |
 | T02 | BLOCKER | R | Obtain read-only baseline of the server (OS, disk, PHP, occ status) | T01 | OPEN |
-| T03 | CRITICAL | R | Verify domain renewal: expiry date, auto-renew, lock, contact email, 2FA. ICANN lookup cannot do .io; use registrar login. Also answer: was the domain moved to GoDaddy in June 2026? (GoDaddy cert 2026-06-19; no 2026 notices from the old registrar.) | Registrar login | OPEN |
+| T03 | HIGH | R | Domain: expiry 2027-06-18 and transfer lock confirmed 2026-10-09. Remaining at registrar login: auto-renew ON, contact email current, 2FA on. Registrar is eNom via qunatum.com. | Registrar login | OPEN — narrowed, downgraded from CRITICAL |
 | T04 | CRITICAL | R | Take a fresh Phase 0 snapshot (config.php, DB dump, data copy or at minimum data listing) before any change. Old backups exist (T22) but are not current. | T01, T02 | OPEN |
 | T05 | CRITICAL | R | Credential and recovery-email inventory for registrar, host, SSH, Nextcloud admin, DB, SMTP, Google accounts (locations only) | Tony | OPEN |
 | T06 | CRITICAL | R | Record Nextcloud version, PHP version (web + CLI), DB type/version, data dir, enabled apps, setup warnings | T02 | OPEN |
@@ -34,7 +34,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 ## Active Work Queue (3–7 items)
 1. T23 — DKIM query. Next: Tony runs the one-liner.
 2. T01 — hosting access path. Next: Tony names the panel URL / SSH availability. Unblocks T02, T06, T26, T27.
-3. T03 — domain renewal state + GoDaddy question. Next: registrar login readout.
+3. T03 — registrar hygiene (auto-renew, contact, 2FA). Next: registrar login readout.
 4. T22 — backup media inventory. Next: Tony plugs drives in one at a time.
 5. T06 — Nextcloud baseline. Next: admin Overview/System pages.
 6. T27 — retire spoke/stratus/nvr1. Next: waits on T01.
