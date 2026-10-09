@@ -6,14 +6,14 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T01 | HIGH | R | Hosting access: **cPanel, SSH available** (2026-10-09). Provider INFERRED HostISO on Leaseweb USA (NYC). Remaining: plan type, provider name on the bill, panel URL recorded (location only). | Tony | MOSTLY ANSWERED — no longer a blocker |
 | T02 | HIGH | R | Server baseline: OS, disk, quota, PHP, DB, cron captured 2026-10-09 (02_Server_Inventory/server_us05.md). Remaining: live Nextcloud occ output, docroot map. | — | MOSTLY DONE |
 | T03 | HIGH | R | Domain: expiry 2027-06-18 and transfer lock confirmed 2026-10-09. Remaining at registrar login: auto-renew ON, contact email current, 2FA on. Registrar is eNom via qunatum.com. | Registrar login | OPEN — narrowed, downgraded from CRITICAL |
-| T04 | CRITICAL | R | Take a fresh Phase 0 snapshot (config.php, DB dump, data copy or at minimum data listing) before any change. Old backups exist (T22) but are not current. | T01, T02 | OPEN |
+| T04 | CRITICAL | R | Phase 0 snapshot: dump every database in the account (cPanel → phpMyAdmin export or `mysqldump` per DB, GREEN-ish: writes a file in home), then copy backupMARCH26-compressed (21 GB), HUB2bu26 (17 GB) and the dumps off the server to Tony's machine or the 2 TB SSD. | T30 | OPEN — now concrete |
 | T05 | CRITICAL | R | Credential and recovery-email inventory for registrar, host, SSH, Nextcloud admin, DB, SMTP, Google accounts (locations only) | Tony | OPEN |
-| T06 | CRITICAL | R | Record Nextcloud version, PHP version (web + CLI), DB type/version, data dir, enabled apps, setup warnings | T02 | OPEN |
+| T06 | HIGH | R | Nextcloud baseline: version 33.0.9, PHP 8.3, MariaDB 10.6, data dir, apps, cron all captured 2026-10-09. Remaining: admin Overview setup warnings. | — | MOSTLY DONE |
 | T07 | HIGH | R | Pull public DNS record set + WHOIS + TLS cert + crt.sh subdomain list from Tony's machine. DNS set done 2026-10-09; IP owner, WHOIS, cert, crt.sh pending | Tony | PARTLY DONE |
 | T08 | HIGH | R | Diagnose 2026-09-03 mail rejection. SPF present, DMARC absent (2026-10-09). Still to do: DKIM check (T23), bounce text, blocklist check of 172.241.164.114 | T23 | OPEN — narrowed |
 | T23 | HIGH | R | Query DKIM: `Resolve-DnsName default._domainkey.longviewhub.io -Type TXT` (and check the host panel's Email Deliverability page). GREEN. | Tony | OPEN |
 | T24 | HIGH | R | Publish DMARC: `_dmarc.longviewhub.io TXT "v=DMARC1; p=none; rua=mailto:<a mailbox Tony reads>"`. YELLOW (DNS change; reversible by deleting the record). Do after T23 so reports are meaningful. Tighten to p=quarantine later. | T23 | OPEN |
-| T09 | HIGH | R | Determine Nextcloud upgrade path (sequential majors), PHP compatibility per step, DB compatibility | T06 | OPEN |
+| T09 | LOW | R | Upgrade path: live instance is 33.0.9, current line; no multi-major jump needed. Track 33.x point releases only. | — | CLOSED 2026-10-09 (superseded) |
 | T10 | HIGH | R | Confirm TLS issuer, expiry, renewal mechanism; cover all live hostnames. crt.sh history captured 2026-10-09; superseded by T26 for the fix. | T07 | PARTLY DONE |
 | T25 | HIGH | R | Identify spoke, stratus, nvr1. Answered 2026-10-09: old projects, retire (D-003). | Tony | DONE |
 | T27 | NORMAL | R | Retire spoke, stratus, nvr1 per D-003, staged: record targets and contents → remove DNS records and panel subdomains (YELLOW) → delete directories/databases per item on Tony's go (RED). Also remove any related Tailscale nodes. | T01 | OPEN |
@@ -29,17 +29,23 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T19 | LOW | M | Outbound SMTP relay through a reputable provider if host IP reputation is the deliverability cause | T08 | OPEN |
 | T20 | LATER | F | Containerization / reverse proxy / SSO / infra-as-code | Stable, backed-up, documented system | PARKED |
 | T22 | CRITICAL | R | Inventory existing backup media: each external HD, Tony's workstation, the 2 TB SSD. For each: date, size, what it contains (data dir? DB dump? config.php?), readable? Record in 06_Backups_Recovery. | Tony's machine | OPEN |
-| T28 | HIGH | R | Map the account: domains → docroots, what sits in public_html (apex), the live Nextcloud version from version.php, config.php safe keys, data directory and size, lastcron, app list. GREEN. | Tony | OPEN |
+| T28 | HIGH | R | Account map and live Nextcloud baseline captured 2026-10-09. | Tony | DONE |
+| T30 | CRITICAL | R | Database inventory: list every MySQL database in the account with size (cPanel → MySQL Databases, or `uapi Mysql list_databases`). Tells us whether the old HUB2 database still exists. GREEN. | Tony | OPEN |
+| T31 | HIGH | R | Take cloud_v35_old off the web: read its config first (safe keys), then move the directory out of public_html (e.g. to ~/retired/) or add a deny rule. YELLOW, reversible by moving it back. Also check clouddata_v35. | T30 | OPEN |
+| T32 | CRITICAL | R | Decide the data question: is the live 1.4 GB everything Tony needs, or must the 17 GB HUB2 data (and its DB: shares, calendars, contacts) be migrated into the 33.0.9 instance? Tony's call; drives the whole recovery plan. | Tony | OPEN |
+| T33 | LATER | M | App rationalization: 76 enabled apps on shared hosting (Talk, Memories, Maps, Music, Mail, PhoneTrack, OIDC, MCP…). Trim to what is used. Phase 3. | T32 | PARKED |
+| T34 | NORMAL | R | Memory cache: check `php -m` for apcu; if present set memcache.local to APCu (YELLOW, config change, reversible). | T06 | OPEN |
+| T35 | NORMAL | R | Admin hygiene (Phase 5): create a distinctly named admin with 2FA, demote `admin`; review bruteforce/suspicious_login settings. | T32 | OPEN |
 | T29 | NORMAL | R | Inventory backupMarch26 (size, contents, whether it has a DB dump) and decide archive-offsite vs delete (K10). Deletion is RED. | T28 | OPEN |
 | T21 | LATER | F | Mine the 2026-05-09 ChatGPT export in Drive for prior setup notes (≈110 MB JSON; needs local grep, not this session) | Tony's machine | PARKED |
 
 ## Active Work Queue (3–7 items)
-1. T23 — DKIM query. Next: Tony runs the one-liner.
-2. T28 — account map + live Nextcloud baseline. Next: Tony pastes the second read-only block in cPanel Terminal.
-3. T03 — registrar hygiene (auto-renew, contact, 2FA). Next: registrar login readout.
-4. T22 — backup media inventory. Next: Tony plugs drives in one at a time.
-5. T06 — Nextcloud baseline. Next: admin Overview/System pages.
-6. T27 — retire spoke/stratus/nvr1. Next: waits on T01.
+1. T32 — the data question (is the 17 GB HUB2 data wanted?). Next: Tony answers.
+2. T30 — database inventory. Next: Tony pastes the third block (cPanel Terminal).
+3. T04 — Phase 0 snapshot: DB dumps + off-server copy of the compressed March backup and HUB2bu26. Next: after T30.
+4. T31 — take cloud_v35_old off the web. Next: after its config is read (third block).
+5. K13 — confirm 153.66.15.100 is Tony. Next: Tony answers.
+6. T23 — DKIM one-liner (PowerShell). T03 registrar hygiene. T22 drives. Unblocked, lower priority.
 
 ## Blocker Log
 | ID | Blocker | Blocks | Opened | Status |

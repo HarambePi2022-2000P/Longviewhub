@@ -1,5 +1,5 @@
 # Nextcloud Baseline Capture
-Instance: Tony says https://longviewhub.io; the server says the app directory is public_html/cloud.longviewhub.io (cron, vhost list). Whether the apex serves Nextcloud directly, redirects to cloud.longviewhub.io, or holds something else is UNKNOWN (next block). Redact anything that looks like a secret.
+Instance: https://cloud.longviewhub.io (the apex holds only a .htaccess, presumably a redirect). Captured 2026-10-09 via cPanel Terminal. Redact anything that looks like a secret.
 
 ## From the admin UI (no shell needed)
 Log in as admin → profile icon → **Administration settings**.
@@ -12,19 +12,19 @@ Log in as admin → profile icon → **Administration settings**.
 ## Fields to populate
 | Field | Value |
 |-------|-------|
-| Nextcloud version | UNKNOWN for the live install. The March-2026 backup copy (backupMarch26/public_html/HUB2) is ≤ 25 (refuses PHP ≥ 8.2). |
+| Nextcloud version | **33.0.9.1** live (CONFIRMED 2026-10-09). Older copies: 35.0.1 (abandoned attempt), 24.0.12 (previous production), 21.0.9 (2021). See install_inventory.md |
 | PHP version (web) | ea-php83 on longviewhub.io and cloud.longviewhub.io (CONFIRMED 2026-10-09) |
 | PHP version (CLI) | 8.3.35 (CONFIRMED 2026-10-09) |
-| Database type / version | MariaDB 10.6.28 (client; server to confirm) |
-| Data directory path | UNKNOWN |
-| Data directory size | UNKNOWN |
-| Background job mode / last run | Cron every 5 min against public_html/cloud.longviewhub.io/cron.php (duplicated); whether it succeeds is UNKNOWN until `lastcron` is read |
-| Setup warnings (count + list) | UNKNOWN |
-| Enabled apps | UNKNOWN |
-| Incompatible / outdated apps | UNKNOWN |
+| Database type / version | MariaDB 10.6.28; DB hfppyjna_cloud33 on localhost, prefix oc_ |
+| Data directory path | /home/hfppyjna/clouddata |
+| Data directory size | 1.4 GB (live). Old HUB2 data: 17 GB in nextclouddata, not in the live instance |
+| Background job mode / last run | cron; lastcron 57 s old at check → working (duplicate crontab line, K9) |
+| Setup warnings (count + list) | UNKNOWN — admin Overview page still needed; at least "no memory cache" expected |
+| Enabled apps | 76 (list captured 2026-10-09) |
+| Incompatible / outdated apps | none flagged by app:list |
 | Users (count) | UNKNOWN |
 | External storage configured? | UNKNOWN |
-| Server-side encryption on? | UNKNOWN (matters for backups: encrypted data needs the keys) |
+| Server-side encryption on? | `encryption` app disabled; `end_to_end_encryption` enabled (client-side keys, user-held) |
 | Hosting provider / plan | HostISO (INFERRED), cPanel shared hosting on CloudLinux 7, 700 GB quota, 213 GB used |
 | Shell access? | Yes, cPanel Terminal (CONFIRMED) |
 
