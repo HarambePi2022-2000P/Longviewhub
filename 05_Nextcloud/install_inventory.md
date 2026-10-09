@@ -13,22 +13,37 @@ Captured 2026-10-09 from cPanel Terminal. Versions read from each copy's `versio
 | Background jobs | mode cron; lastcron 2026-10-09 15:25:02 EDT, 57 s before the check → **cron is working** |
 | Log | clouddata/nextcloud.log, 3.8 MB |
 | Cache | no memcache.* keys in config → no memory cache configured (K15) |
+| Web PHP handler | `ea-php83___lsphp` in the apex .htaccess → Apache with CloudLinux mod_lsapi (LiteSpeed PHP SAPI). PHP modules: bcmath, gd, gmp, intl, redis (client module only), Zend OPcache. **No APCu, no imagick.** CloudLinux PHP Selector is present (`~/.cl.selector`), so extensions can be enabled self-service (T34). |
 | Apps | 76 enabled (incl. activity, calendar, contacts, mail, maps, memories, music, notes, phonetrack, photos, spreed/Talk, tasks, text, oidc, mcp, secrets, end_to_end_encryption, twofactor_totp/email/backupcodes, bruteforcesettings, suspicious_login); 31 disabled (incl. encryption, files_antivirus, recognize, user_ldap). Full list in the 2026-10-09 capture. |
-| Admin account | username is literally `admin` (from log entries) |
+| Admin account | username is literally `admin` (from log entries). Old HUB2 had users `admin` and `claire` (data dir listing). |
+
+## Databases in the account (uapi Mysql list_databases, 2026-10-09)
+| Database | Size | Belongs to | Status |
+|----------|------|-----------|--------|
+| hfppyjna_cloud33 | 32 MB | live 33.0.9 | LIVE |
+| hfppyjna_cloud35 | 12 MB | abandoned v35 attempt | retire after Phase 0 snapshot |
+| hfppyjna_hub2bu26 | 41 MB | HUB2 (v24) database copy made ~2026-10-01, by name | KEEP — migration source candidate |
+| hfppyjna_next815 | 36 MB | UNKNOWN by name; plausibly HUB2's original production DB. Check `dbname` in backupMarch26/public_html/HUB2/config/config.php | KEEP until identified |
+| hfppyjna_net2f13 | 0.4 MB | UNKNOWN; tiny | KEEP until identified |
+
+## Apex longviewhub.io
+The apex `.htaccess` contains only `RewriteEngine on` and the cPanel PHP handler. **No redirect, no index file**: https://longviewhub.io/ serves an Apache 403 (directory listing denied), which is what the earlier HEAD probe saw (K4 explained). Nextcloud lives only at https://cloud.longviewhub.io. Decision pending on whether the apex should redirect there (subdomain strategy, K17).
 
 ## Every other Nextcloud / ownCloud copy on the account
 | Path | Version | What it looks like | Status |
 |------|---------|--------------------|--------|
-| public_html/cloud_v35_old | 35.0.1 | a separate install attempt, dirs dated 2026-10-06; **still web-reachable at longviewhub.io/cloud_v35_old/ and being hit by scanners**; its log lines land in clouddata/nextcloud.log, so its config points at the live data directory or log file (K12) | ABANDONED, EXPOSED |
-| clouddata_v35 (home) | — | data dir for the v35 attempt, 2026-10-06 | ABANDONED |
+| public_html/cloud_v35_old | 35.0.1.1 | 992 MB of code. Tony installed 35 on 2026-10-06 and reinstalled 33 on 10-07 for app compatibility (Nextcloud cannot downgrade, so 33 is a fresh install). Its config.php points **datadirectory at /home/hfppyjna/clouddata, the live data directory**, and at DB hfppyjna_cloud35. Web-reachable and scanned (K12). Deleting the code directory does not touch data. | RETIRE — authorized by Tony 2026-10-09 (D-005) |
+| clouddata_v35 (home) | — | 111 MB, 2026-10-06; an earlier data dir for the v35 attempt before it was pointed at clouddata | RETIRE with cloud_v35_old, after Phase 0 snapshot |
 | backupMarch26/public_html/HUB2 | 24.0.12 | the previous production install ("HUB2"), upgraded 24.0.4 → 24.0.12 by the built-in updater on 2026-03-13 | BACKUP COPY (67 GB folder = full home snapshot of 2026-03-13) |
 | backupMarch26/public_html/hub | 24.0.4 | an even earlier "hub" install | BACKUP COPY |
-| nextclouddata (home) | — | **17 GB**; contains updater-*/backups/nextcloud-24.0.4.1 → this is HUB2's data directory | OLD PRODUCTION DATA, on server only |
-| HUB2bu26 (home) | — | 17 GB, dated 2026-10-01, same updater backup inside → a copy of nextclouddata made 2026-10-01 | BACKUP COPY |
+| nextclouddata (home) | — | **17 GB**; users `admin`, `claire`; appdata for two instance ids; updater backups → **HUB2's data directory**. Migration source. | OLD PRODUCTION DATA, on server only |
+| HUB2bu26 (home) | — | 17 GB, dated 2026-10-01; same users and appdata as nextclouddata plus an extra appdata_oc0zgoqljxuh dated 2026-09-28 (a short-lived instance used this dir around 09-28; `backup_2026-09-28` in home is from the same day) | BACKUP COPY |
 | .trash/HUB2, .trash/HUB2bu26 | 24.0.12 | HUB2 code moved to cPanel trash | TRASH |
-| hubdata (home) | — | 2026-04-01; size small (not in top 8) | UNKNOWN |
-| RJ/NC_old/nextcloud, backupMarch26/RJ/NC_old/nextcloud | 21.0.9 | the original 2021-era install | ARCHIVE |
-| Downloads/public_html/nextcloud | 21.0.9 | another 2021 copy | ARCHIVE |
+| hubdata (home) | — | now **empty** (4 KB, 2026-04-01). But backupMARCH26-compressed/hubdata.tar.gz is **12 GB** and backupMarch26/hubdata exists → the "hub" (24.0.4) data directory was 12+ GB in March and was emptied afterwards. Whether that content lives on in HUB2's data is UNKNOWN (K20). | ARCHIVE — identify before deletion |
+| RJ/NC_old (33 GB) + RJ/NC_old.tar.gz (11 GB) | 21.0.9 | the original 2021-era install **with 33 GB of content**. Whether its data was carried into hub/HUB2 is UNKNOWN (K19). | ARCHIVE — identify before deletion |
+| Downloads/public_html (27 GB) incl. nextcloud 21.0.9, OC, Zphoto, LuxCal, subhome | mixed | a copy of an old public_html, 2022 era | ARCHIVE — identify before deletion |
+| public_html/paladin (9.1 GB, 2022-09) | — | UNKNOWN; sits in the web root, reachable at longviewhub.io/paladin/ (K18) | UNKNOWN — ask Tony |
+| ~/ziDVB66i (4.8 GB file, 2022-06-15, mode 600) | — | UNKNOWN blob; also present in backupMarch26 | UNKNOWN — ask Tony or `file` it |
 | Downloads/OC, Downloads/public_html/OC | ownCloud 10.10.0 | ownCloud trial | ARCHIVE |
 | Downloads/Zphoto, Downloads/public_html/Zphoto, backupMarch26/Zphoto | Zenphoto | photo gallery trial | ARCHIVE |
 
@@ -39,7 +54,8 @@ Captured 2026-10-09 from cPanel Terminal. Versions read from each copy's `versio
 - 2026-10-01: nextclouddata copied to HUB2bu26; HUB2 code moved to trash.
 - 2026-10-06: v35 install attempt (cloud_v35_old, clouddata_v35).
 - 2026-10-07: **fresh Nextcloud 33.0.9 installed** at cloud.longviewhub.io, new DB hfppyjna_cloud33, data dir clouddata (1.4 GB); apex .htaccess written.
-- Reading: Tony is mid-rebuild. The live instance is one week old and holds 1.4 GB. The 17 GB of HUB2 data has not (yet) been brought into it. Whether that 17 GB is wanted is the key open question (T32).
+- 2026-10-09 Tony: **everything from HUB2 (files, calendars, contacts, shares) is to be migrated into the live 33.0.9 instance** (T32 answered). Approach to be decided (D-004).
+- Reading: a sequence of rebuild attempts (09-28, 10-06, 10-07) left several installs and data copies on the box. The live instance is one week old and holds 1.4 GB.
 
 ## Where the 213 GB sits (du, 2026-10-09)
 | Path | Size |

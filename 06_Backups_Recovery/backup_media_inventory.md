@@ -11,7 +11,7 @@ Known so far (Tony, 2026-10-06): old backups on external HDs; maybe a copy on th
 | M3 | Workstation (Tycho) | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | |
 | M4 | 2 TB SSD (locked) | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | Needs unlocking by Tony; encryption type UNKNOWN |
 | S1 | **on-server** /home/hfppyjna/backupMarch26 | full home snapshot | 2026-03-13 | 67 GB | yes (nextclouddata inside) | UNKNOWN — no .sql found at depth ≤3 | yes (HUB2/config) | 24.0.12 | yes | same disk as production: a restore point, not a backup |
-| S2 | **on-server** backupMARCH26-compressed | archive of S1? | 2026-03-13 | 21 GB | presumably | UNKNOWN | presumably | 24.0.12 | yes | portable; best candidate to copy off-server first |
+| S2 | **on-server** backupMARCH26-compressed | hubdata.tar.gz (12 GB) + nextclouddata.tar.gz (9.7 GB) | 2026-03-13 | 21 GB | yes (both data dirs) | no | no | 24.x data | yes | portable; copy off-server in Phase 0 |
 | S3 | **on-server** HUB2bu26 | copy of old data dir | 2026-10-01 | 17 GB | yes | UNKNOWN | UNKNOWN | 24.0.12 data | yes | same disk |
 | S4 | **on-server** nextclouddata | old production data dir itself | 2026-10-01 | 17 GB | yes | n/a | n/a | 24.0.12 data | yes | not a backup; the original |
 | S5 | **on-server** .trash/HUB2, .trash/HUB2bu26 | old code in cPanel trash | 2026-10 | UNKNOWN | no | no | config? | 24.0.12 | yes | trash is purged by cPanel; do not rely on it |
@@ -26,3 +26,14 @@ Get-ChildItem E:\ -Recurse -Include *.sql,*.sql.gz,config.php,version.php -Error
 What it does: lists volumes, lists top-level folders with dates, and finds the three files that tell us whether a backup is complete (a database dump, the Nextcloud config, and the version marker). Nothing is written.
 
 A Nextcloud backup is only complete if it has all three: the **data directory**, a **database dump**, and **config.php**. Data without the database restores files but loses shares, users, calendars, contacts and app data. Database without data is a skeleton.
+
+
+## Phase 0 snapshot plan (2026-10-09)
+Goal: one complete, off-server copy of everything that cannot be recreated, before any migration or deletion.
+1. **Databases** (≈120 MB total): cPanel → Backup → "Download a MySQL Database Backup" → click each of the five (cloud33, cloud35, hub2bu26, next815, net2f13). Saves .sql.gz files to Tony's machine. GREEN.
+2. **Data directories and mail** (≈20 GB compressed): in cPanel Terminal create ~/phase0/ and tar nextclouddata, clouddata, mail+etc. YELLOW (writes ~20 GB into the 487 GB free quota; nothing modified).
+3. **Existing March tarballs** (21 GB): hubdata.tar.gz and nextclouddata.tar.gz from backupMARCH26-compressed.
+4. **Download** items 2–3 to the 2 TB SSD via cPanel File Manager or an SFTP client (WinSCP/FileZilla over SSH). ≈41 GB; hours on a home connection; run overnight.
+5. **Verify**: file sizes match; `tar -tzf` lists each archive without error; one .sql.gz opens.
+6. Later: RJ/NC_old.tar.gz (11 GB) and Downloads/public_html once Tony has said what they are (T37).
+Not done until step 5 passes. Only then: v35 cleanup, migration, deletions.

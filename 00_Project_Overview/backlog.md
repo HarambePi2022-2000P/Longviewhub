@@ -11,7 +11,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T06 | HIGH | R | Nextcloud baseline: version 33.0.9, PHP 8.3, MariaDB 10.6, data dir, apps, cron all captured 2026-10-09. Remaining: admin Overview setup warnings. | — | MOSTLY DONE |
 | T07 | HIGH | R | Pull public DNS record set + WHOIS + TLS cert + crt.sh subdomain list from Tony's machine. DNS set done 2026-10-09; IP owner, WHOIS, cert, crt.sh pending | Tony | PARTLY DONE |
 | T08 | HIGH | R | Diagnose 2026-09-03 mail rejection. SPF present, DMARC absent (2026-10-09). Still to do: DKIM check (T23), bounce text, blocklist check of 172.241.164.114 | T23 | OPEN — narrowed |
-| T23 | HIGH | R | Query DKIM: `Resolve-DnsName default._domainkey.longviewhub.io -Type TXT` (and check the host panel's Email Deliverability page). GREEN. | Tony | OPEN |
+| T23 | HIGH | R | DKIM status: easiest from cPanel → Email → Email Deliverability (shows SPF/DKIM state per domain and offers a one-click repair that writes the records, since DNS is on the host). GREEN to look; YELLOW to repair. PowerShell alternative: `Resolve-DnsName default._domainkey.longviewhub.io -Type TXT`. | Tony | OPEN |
 | T24 | HIGH | R | Publish DMARC: `_dmarc.longviewhub.io TXT "v=DMARC1; p=none; rua=mailto:<a mailbox Tony reads>"`. YELLOW (DNS change; reversible by deleting the record). Do after T23 so reports are meaningful. Tighten to p=quarantine later. | T23 | OPEN |
 | T09 | LOW | R | Upgrade path: live instance is 33.0.9, current line; no multi-major jump needed. Track 33.x point releases only. | — | CLOSED 2026-10-09 (superseded) |
 | T10 | HIGH | R | Confirm TLS issuer, expiry, renewal mechanism; cover all live hostnames. crt.sh history captured 2026-10-09; superseded by T26 for the fix. | T07 | PARTLY DONE |
@@ -30,22 +30,24 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T20 | LATER | F | Containerization / reverse proxy / SSO / infra-as-code | Stable, backed-up, documented system | PARKED |
 | T22 | CRITICAL | R | Inventory existing backup media: each external HD, Tony's workstation, the 2 TB SSD. For each: date, size, what it contains (data dir? DB dump? config.php?), readable? Record in 06_Backups_Recovery. | Tony's machine | OPEN |
 | T28 | HIGH | R | Account map and live Nextcloud baseline captured 2026-10-09. | Tony | DONE |
-| T30 | CRITICAL | R | Database inventory: list every MySQL database in the account with size (cPanel → MySQL Databases, or `uapi Mysql list_databases`). Tells us whether the old HUB2 database still exists. GREEN. | Tony | OPEN |
-| T31 | HIGH | R | Take cloud_v35_old off the web: read its config first (safe keys), then move the directory out of public_html (e.g. to ~/retired/) or add a deny rule. YELLOW, reversible by moving it back. Also check clouddata_v35. | T30 | OPEN |
-| T32 | CRITICAL | R | Decide the data question: is the live 1.4 GB everything Tony needs, or must the 17 GB HUB2 data (and its DB: shares, calendars, contacts) be migrated into the 33.0.9 instance? Tony's call; drives the whole recovery plan. | Tony | OPEN |
+| T30 | CRITICAL | R | Database inventory done 2026-10-09: cloud33, cloud35, hub2bu26, next815, net2f13. Remaining: read HUB2's config to learn which DB it used (K21). | — | MOSTLY DONE |
+| T31 | HIGH | R | Take cloud_v35_old off the web (D-005 step 1): move cloud_v35_old and clouddata_v35 to ~/retired/. YELLOW, reversible. Command issued to Tony 2026-10-09. Step 2 (delete + drop cloud35 DB, RED) after T04. | — | IN PROGRESS |
+| T32 | CRITICAL | R | Data question answered 2026-10-09: migrate everything from HUB2 into the live instance. | Tony | DONE |
+| T36 | CRITICAL | R | **Migration HUB2 → 33.0.9** per D-004 once chosen: files, calendars, contacts, shares. Starts only after T04 passes. | T04, D-004 | OPEN |
+| T37 | HIGH | R | Classify the big unknowns with Tony: paladin (9 GB, web root), RJ/NC_old (33 GB, 2021 Nextcloud), hubdata.tar.gz (12 GB, March), Downloads/public_html (27 GB), ziDVB66i (5 GB file). Keep / archive off-server / delete. | Tony | OPEN |
 | T33 | LATER | M | App rationalization: 76 enabled apps on shared hosting (Talk, Memories, Maps, Music, Mail, PhoneTrack, OIDC, MCP…). Trim to what is used. Phase 3. | T32 | PARKED |
-| T34 | NORMAL | R | Memory cache: check `php -m` for apcu; if present set memcache.local to APCu (YELLOW, config change, reversible). | T06 | OPEN |
+| T34 | NORMAL | R | Memory cache: APCu not loaded. cPanel → Select PHP Version (CloudLinux PHP Selector) → enable `apcu` and `imagick` for 8.3 (YELLOW), then set memcache.local to APCu in config (YELLOW). | T06 | OPEN |
 | T35 | NORMAL | R | Admin hygiene (Phase 5): create a distinctly named admin with 2FA, demote `admin`; review bruteforce/suspicious_login settings. | T32 | OPEN |
 | T29 | NORMAL | R | Inventory backupMarch26 (size, contents, whether it has a DB dump) and decide archive-offsite vs delete (K10). Deletion is RED. | T28 | OPEN |
 | T21 | LATER | F | Mine the 2026-05-09 ChatGPT export in Drive for prior setup notes (≈110 MB JSON; needs local grep, not this session) | Tony's machine | PARKED |
 
 ## Active Work Queue (3–7 items)
-1. T32 — the data question (is the 17 GB HUB2 data wanted?). Next: Tony answers.
-2. T30 — database inventory. Next: Tony pastes the third block (cPanel Terminal).
-3. T04 — Phase 0 snapshot: DB dumps + off-server copy of the compressed March backup and HUB2bu26. Next: after T30.
-4. T31 — take cloud_v35_old off the web. Next: after its config is read (third block).
-5. K13 — confirm 153.66.15.100 is Tony. Next: Tony answers.
-6. T23 — DKIM one-liner (PowerShell). T03 registrar hygiene. T22 drives. Unblocked, lower priority.
+1. T31 — move cloud_v35_old + clouddata_v35 to ~/retired/. Next: Tony runs the one-line move; Claude logs the change.
+2. T04 — Phase 0 snapshot (plan in 06_Backups_Recovery). Next: Tony downloads the five DB backups from cPanel → Backup, runs the tar block, unlocks the 2 TB SSD, SFTPs ≈41 GB.
+3. D-004 — migration approach. Next: Tony picks A (import into fresh) or B (upgrade HUB2 in place).
+4. T37 — classify paladin / NC_old / hubdata.tar.gz / Downloads / ziDVB66i. Next: Tony answers in one line each.
+5. K21 — which DB did HUB2 use. Next: one grep in the next terminal block.
+6. T23 — DKIM via cPanel Email Deliverability. T03 registrar hygiene. T22 drives. Unblocked, behind Phase 0.
 
 ## Blocker Log
 | ID | Blocker | Blocks | Opened | Status |

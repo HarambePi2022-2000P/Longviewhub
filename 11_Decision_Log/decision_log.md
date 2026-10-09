@@ -28,3 +28,17 @@
 
 ## Lesson recorded 2026-10-09 — crt.sh lag
 - A certificate-renewal failure was declared from crt.sh history and was wrong; the serving certificate had renewed on 2026-09-05 and crt.sh had not indexed it. Rule: read the serving certificate (browser padlock or openssl) before concluding anything about renewal state. crt.sh is a lower bound on what has been issued.
+
+## D-004 — How to migrate HUB2 into the live 33.0.9 instance (PENDING)
+- Date raised: 2026-10-09. Tony's requirement: everything from HUB2 (files, calendars, contacts, shares, "everything else") into the new instance.
+- Option A, **import into the fresh instance**: copy user file trees into clouddata and run `occ files:scan`; extract calendars and contacts from the HUB2 database (iCalendar and vCard blobs in oc_calendarobjects / oc_cards) and import them through the Calendar and Contacts apps; recreate shares by hand (two users). Keeps the new instance and its app setup. Loses: share links and tokens, file version history, trash, activity log, per-app data not re-imported.
+- Option B, **upgrade HUB2 in place to 33 and make it the production instance**: stage the 24.0.12 code + nextclouddata + a copy of its DB under a temporary path, step 24→25→26→27→28→29→30→31→32→33 with PHP switched 8.1 → 8.2 → 8.3 via MultiPHP, then swap it into cloud.longviewhub.io and copy the 1.4 GB of new files in. Preserves everything Nextcloud knows about. Costs: nine upgrade hops on shared hosting (time limits, memory), three PHP switches, the week-old instance's app configuration is discarded, higher chance of a mid-sequence failure that needs a restore.
+- PM recommendation: **Option A**, because the new instance is the one Tony wants to keep, there are two users so shares are few, and nine sequential upgrades through PHP changes on shared hosting is the riskier operation. Choose B only if version history, trash contents or existing share links matter.
+- Reversibility: both start from the Phase 0 snapshot and leave HUB2's data untouched; A can be redone, B can be abandoned at any hop.
+- Status: awaiting Tony's choice.
+
+## D-005 — Remove the abandoned Nextcloud 35 install
+- Date: 2026-10-09. Decision: retire public_html/cloud_v35_old, clouddata_v35 and database hfppyjna_cloud35. Authorized by Tony ("delete whatever files you need to get the 35 stuff out of there"); he reinstalled 33 on 2026-10-07 for app compatibility.
+- Execution: staged. Step 1 now: move cloud_v35_old and clouddata_v35 out of the web root into ~/retired/ (YELLOW, reversible by moving back) — this ends the public exposure immediately. Step 2 after the Phase 0 snapshot is verified: delete ~/retired/* and drop hfppyjna_cloud35 (RED).
+- Why not delete immediately: cloud_v35_old's config points at the live data directory; the code dir itself holds no data, but the rule is no deletion before an off-server snapshot exists. The move achieves the security goal with zero data risk.
+- Affected: web root, quota (≈1.1 GB freed at step 2), MySQL.
