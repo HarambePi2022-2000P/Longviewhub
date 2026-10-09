@@ -18,6 +18,9 @@ Updated 2026-10-03.
 |----|-------|------------|----------|--------|
 | K1 | Mail from johnson.ross@longviewhub.io refused by a California state agency gateway | 2026-09-03 | Gmail thread (Tony re-sent via another address) | OPEN — bounce text needed |
 | K2 | No 2026 domain-renewal notices in johnson.ross.a@gmail.com, unlike 2023–2025. Domain was nonetheless renewed to 2027-06-18. Either renewed early, auto-renew is on, or the notice address changed. | 2026-06 (absence) | Gmail; WHOIS | OPEN — resolve at registrar login (auto-renew + contact email) |
+| K9 | Duplicate cron entries for Nextcloud cron.php (same job twice every 5 minutes, output discarded) | 2026-10-09 | crontab -l | OPEN — collapse to one line with a log, YELLOW, after baseline |
+| K10 | An older Nextcloud copy (≤ v25) sits in /home/hfppyjna/backupMarch26/public_html/HUB2 on the same server; counts toward the 213 GB quota; its data directory and DB, if any, are UNKNOWN | 2026-10-09 | find + occ error | OPEN — inventory before anything is deleted |
+| K11 | Host platform age: CloudLinux 7 kernel, MariaDB 10.6 (both past upstream EOL unless the host buys extended support) | 2026-10-09 | uname, mysql --version | OPEN — input to Phase 3 stay/move decision |
 | K8 | Registrar record "Updated 2026-10-09", same day as five DNS zone edits (K5). Cause unknown. | 2026-10-09 | WHOIS | OPEN — ask Tony whether he changed anything that day |
 | K3 | No DMARC record for longviewhub.io | 2026-10-09 | Resolve-DnsName _dmarc.longviewhub.io TXT → empty | OPEN — fix is T24 |
 | K4 | HEAD / from a non-browser client returns an Apache error-style page (ISO-8859-1, no Nextcloud headers). Likely WAF/ModSecurity. Users unaffected. | 2026-10-09 | PowerShell Invoke-WebRequest headers | OPEN — low priority, note for monitoring design |

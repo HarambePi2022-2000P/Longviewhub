@@ -4,7 +4,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | ID | Cat | Track | Task | Depends on | Status |
 |----|-----|-------|------|------------|--------|
 | T01 | HIGH | R | Hosting access: **cPanel, SSH available** (2026-10-09). Provider INFERRED HostISO on Leaseweb USA (NYC). Remaining: plan type, provider name on the bill, panel URL recorded (location only). | Tony | MOSTLY ANSWERED — no longer a blocker |
-| T02 | BLOCKER | R | Obtain read-only baseline of the server (OS, disk, PHP, occ status) | T01 | OPEN |
+| T02 | HIGH | R | Server baseline: OS, disk, quota, PHP, DB, cron captured 2026-10-09 (02_Server_Inventory/server_us05.md). Remaining: live Nextcloud occ output, docroot map. | — | MOSTLY DONE |
 | T03 | HIGH | R | Domain: expiry 2027-06-18 and transfer lock confirmed 2026-10-09. Remaining at registrar login: auto-renew ON, contact email current, 2FA on. Registrar is eNom via qunatum.com. | Registrar login | OPEN — narrowed, downgraded from CRITICAL |
 | T04 | CRITICAL | R | Take a fresh Phase 0 snapshot (config.php, DB dump, data copy or at minimum data listing) before any change. Old backups exist (T22) but are not current. | T01, T02 | OPEN |
 | T05 | CRITICAL | R | Credential and recovery-email inventory for registrar, host, SSH, Nextcloud admin, DB, SMTP, Google accounts (locations only) | Tony | OPEN |
@@ -29,11 +29,13 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | T19 | LOW | M | Outbound SMTP relay through a reputable provider if host IP reputation is the deliverability cause | T08 | OPEN |
 | T20 | LATER | F | Containerization / reverse proxy / SSO / infra-as-code | Stable, backed-up, documented system | PARKED |
 | T22 | CRITICAL | R | Inventory existing backup media: each external HD, Tony's workstation, the 2 TB SSD. For each: date, size, what it contains (data dir? DB dump? config.php?), readable? Record in 06_Backups_Recovery. | Tony's machine | OPEN |
+| T28 | HIGH | R | Map the account: domains → docroots, what sits in public_html (apex), the live Nextcloud version from version.php, config.php safe keys, data directory and size, lastcron, app list. GREEN. | Tony | OPEN |
+| T29 | NORMAL | R | Inventory backupMarch26 (size, contents, whether it has a DB dump) and decide archive-offsite vs delete (K10). Deletion is RED. | T28 | OPEN |
 | T21 | LATER | F | Mine the 2026-05-09 ChatGPT export in Drive for prior setup notes (≈110 MB JSON; needs local grep, not this session) | Tony's machine | PARKED |
 
 ## Active Work Queue (3–7 items)
 1. T23 — DKIM query. Next: Tony runs the one-liner.
-2. T02/T06 — server + Nextcloud baseline via cPanel Terminal (Step 4). Next: Tony pastes the read-only block.
+2. T28 — account map + live Nextcloud baseline. Next: Tony pastes the second read-only block in cPanel Terminal.
 3. T03 — registrar hygiene (auto-renew, contact, 2FA). Next: registrar login readout.
 4. T22 — backup media inventory. Next: Tony plugs drives in one at a time.
 5. T06 — Nextcloud baseline. Next: admin Overview/System pages.
@@ -43,7 +45,7 @@ Updated 2026-10-03. Categories: BLOCKER · CRITICAL · HIGH · NORMAL · LOW · 
 | ID | Blocker | Blocks | Opened | Status |
 |----|---------|--------|--------|--------|
 | B01 | Session egress proxy blocks DNS, RDAP, crt.sh, and longviewhub.io itself | T07 from this session | 2026-10-03 | OPEN — workaround: run from Tony's machine |
-| B02 | No server access from this session | T02, T04, T06 | 2026-10-03 | OPEN — Tony runs commands |
+| B02 | No server access from this session | T02, T04, T06 | 2026-10-03 | OPEN — Tony relays via cPanel Terminal; workable |
 | B03 | Hosting provider unknown | T01 → nearly everything | 2026-10-03 | CLOSED 2026-10-09 — cPanel + SSH confirmed; provider inferred HostISO |
 | B04 | Credential locations unknown | T05 | 2026-10-03 | OPEN |
 | B05 | Documentation has no permanent home | Continuity across sessions | 2026-10-03 | CLOSED 2026-10-09 — repo github.com/HarambePi2022-2000P/Longviewhub (D-002) |

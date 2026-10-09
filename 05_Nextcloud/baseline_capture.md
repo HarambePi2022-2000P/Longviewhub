@@ -1,5 +1,5 @@
 # Nextcloud Baseline Capture
-Instance: https://longviewhub.io (apex). Fill from the admin UI or `occ`. Redact anything that looks like a secret.
+Instance: Tony says https://longviewhub.io; the server says the app directory is public_html/cloud.longviewhub.io (cron, vhost list). Whether the apex serves Nextcloud directly, redirects to cloud.longviewhub.io, or holds something else is UNKNOWN (next block). Redact anything that looks like a secret.
 
 ## From the admin UI (no shell needed)
 Log in as admin → profile icon → **Administration settings**.
@@ -12,21 +12,21 @@ Log in as admin → profile icon → **Administration settings**.
 ## Fields to populate
 | Field | Value |
 |-------|-------|
-| Nextcloud version | UNKNOWN |
-| PHP version (web) | UNKNOWN |
-| PHP version (CLI) | UNKNOWN |
-| Database type / version | UNKNOWN |
+| Nextcloud version | UNKNOWN for the live install. The March-2026 backup copy (backupMarch26/public_html/HUB2) is ≤ 25 (refuses PHP ≥ 8.2). |
+| PHP version (web) | ea-php83 on longviewhub.io and cloud.longviewhub.io (CONFIRMED 2026-10-09) |
+| PHP version (CLI) | 8.3.35 (CONFIRMED 2026-10-09) |
+| Database type / version | MariaDB 10.6.28 (client; server to confirm) |
 | Data directory path | UNKNOWN |
 | Data directory size | UNKNOWN |
-| Background job mode / last run | UNKNOWN |
+| Background job mode / last run | Cron every 5 min against public_html/cloud.longviewhub.io/cron.php (duplicated); whether it succeeds is UNKNOWN until `lastcron` is read |
 | Setup warnings (count + list) | UNKNOWN |
 | Enabled apps | UNKNOWN |
 | Incompatible / outdated apps | UNKNOWN |
 | Users (count) | UNKNOWN |
 | External storage configured? | UNKNOWN |
 | Server-side encryption on? | UNKNOWN (matters for backups: encrypted data needs the keys) |
-| Hosting provider / plan | UNKNOWN |
-| Shell access? | UNKNOWN |
+| Hosting provider / plan | HostISO (INFERRED), cPanel shared hosting on CloudLinux 7, 700 GB quota, 213 GB used |
+| Shell access? | Yes, cPanel Terminal (CONFIRMED) |
 
 ## Access policy
 - Tony's personal password is never pasted into chat or stored here.
