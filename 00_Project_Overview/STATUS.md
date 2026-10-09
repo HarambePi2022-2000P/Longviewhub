@@ -3,17 +3,17 @@
 
 | Field | Value |
 |-------|-------|
-| Status as of | 2026-10-09 |
+| Status as of | 2026-10-09 (evening) |
 | Project phase | Phase 1 — Discover (Phase 0 Preserve starts the moment server access exists) |
-| System state | Domain live; mailbox working with a deliverability problem; Nextcloud at https://longviewhub.io (version/host unknown); old backups on external HDs, currency unknown |
-| What changed last | 2026-10-09: documentation repo Longviewhub created by Tony and populated (first push). 2026-10-06: Nextcloud location and backup media confirmed. No infrastructure changes yet. |
-| Current blockers | B01 session cannot reach public DNS or the server · B03 hosting provider unknown · B04 credential locations unknown |
+| System state | Domain live on host-run DNS (server.plus / hostiso.com); server 172.241.164.114, Apache; mail self-hosted on the same box, SPF present, DMARC absent; Nextcloud version unknown; old backups on external HDs, currency unknown |
+| What changed last | 2026-10-09: DNS record set captured from Tony's machine; hosting provider inferred (HostISO); DMARC gap found. Repo populated the same day. No infrastructure changes yet. |
+| Current blockers | B01 session cannot reach public DNS or the server · B03 hosting provider inferred, plan and access path still unknown · B04 credential locations unknown |
 | Active queue | T01 hosting/access · T03 domain renewal state · T07 public lookups · T02/T06 server baseline · T04 backup existence |
-| Best next action | Tony runs Step 1 of `10_Runbooks/discovery_checklist.md` from his own machine and pastes the output |
+| Best next action | Tony finishes Step 1 (IP owner, ICANN lookup, crt.sh) plus the one-line DKIM query, then the registrar readout |
 
 ## Waiting on Tony
-1. Step 1 public-lookup output (DNS, WHOIS, cert, crt.sh list) from his own machine.
-2. Registrar readout: expiry, auto-renew, lock, contact email, nameservers, 2FA.
+1. Rest of Step 1: ipinfo.io for 172.241.164.114, ICANN lookup for registrar/expiry, crt.sh hostname list; plus DKIM query (T23).
+2. Registrar readout: expiry, auto-renew, lock, contact email, 2FA (nameservers already known).
 3. Hosting provider, plan, and access path (panel / SSH) for the server behind longviewhub.io.
 4. Nextcloud baseline from the admin UI (05_Nextcloud/baseline_capture.md) or shell (Step 4), secrets redacted.
 5. Backup media inventory (06_Backups_Recovery/backup_media_inventory.md): external HDs, workstation, 2 TB SSD.

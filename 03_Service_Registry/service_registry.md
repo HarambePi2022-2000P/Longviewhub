@@ -4,9 +4,9 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 ## Nextcloud
 - Purpose: files, photos (Android "Photos for Nextcloud" client), sync
 - Domain/Subdomain: **https://longviewhub.io** (apex) — CONFIRMED by Tony 2026-10-06
-- Server/Host: UNKNOWN — discovery required
+- Server/Host: 172.241.164.114, Apache with HTTP/2. Hosting provider INFERRED: HostISO (hostiso.com) or a brand it operates (nameservers ns1–4.server.plus, SOA admin monitor.corp.hostiso.com). Plan type (shared cPanel / VPS) UNKNOWN. Confirm via IP ownership lookup and Tony's billing.
 - Application / Version: Nextcloud / UNKNOWN
-- Runtime: PHP UNKNOWN; web server UNKNOWN
+- Runtime: PHP UNKNOWN; web server Apache (CONFIRMED 2026-10-09)
 - Database: UNKNOWN type/version/location
 - Storage Location: UNKNOWN (data directory)
 - Ports: UNKNOWN (443 expected)
@@ -32,21 +32,21 @@ Updated 2026-10-03. "UNKNOWN — discovery required" is a real value, not a plac
 
 ## Email — @longviewhub.io
 - Purpose: identity mailbox johnson.ross@longviewhub.io (plus possibly others)
-- Provider / MX: UNKNOWN
+- Provider / MX: self-hosted on the same server as Nextcloud (MX → longviewhub.io, 172.241.164.114). CONFIRMED 2026-10-09. Mail software UNKNOWN (Exim if cPanel).
 - Client: FairEmail on Android (Pro, 2025-07-08)
-- Auth records (SPF/DKIM/DMARC): UNKNOWN
+- Auth records: SPF present (`+a +mx` + three host IPs, `~all`); **DMARC absent**; DKIM UNKNOWN. CONFIRMED 2026-10-09
 - Current Status: inbound and outbound working 2026-09-23; one outbound rejection by a government gateway 2026-09-03
 - Security Concerns: deliverability; whether IMAP/SMTP are TLS-only UNKNOWN
 - Recovery Priority: 1
 
 ## DNS (authoritative)
-- Provider: UNKNOWN (registrar default / host / Cloudflare)
-- Records: UNKNOWN — see 04_Networking_DNS/dns_registry.md
+- Provider: the web host's DNS cluster — ns1–ns4.server.plus, administered by hostiso.com (CONFIRMED 2026-10-09). Edited through the hosting panel, INFERRED.
+- Records: see 04_Networking_DNS/dns_registry.md (populated 2026-10-09)
 - Recovery Priority: 1
 
 ## TLS certificates
-- Issuer / expiry / renewal mechanism: UNKNOWN
-- Hostnames covered: UNKNOWN
+- Issuer / expiry / renewal mechanism: UNKNOWN (HSTS is set to 2 years with includeSubDomains, so every subdomain must stay on valid HTTPS)
+- Hostnames covered: UNKNOWN — crt.sh pending
 - Recovery Priority: 2
 
 ## Tailscale tailnet
